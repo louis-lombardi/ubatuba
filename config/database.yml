@@ -1,0 +1,28 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 10
+  reconnect: true
+
+  socket: /var/run/mysqld/mysqld.sock 
+
+
+development:
+  <<: *default
+  username: u259172299_louis
+  password: Bali-ubatuba88
+  host: srv1194.hstgr.io
+  database: u259172299_placetrip
+  port: 3306
+
+test:
+  <<: *default
+  database: app_test
+
+production:
+  <<: *default
+  database: app_production
+  username: app
+  password: <%= ENV['APP_DATABASE_PASSWORD'] %>
+
+

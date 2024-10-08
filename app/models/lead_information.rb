@@ -1,0 +1,2 @@
+class LeadInformation < ApplicationRecord
+end
