@@ -1,2 +1,0 @@
-class LeadInformation < ApplicationRecord
-end

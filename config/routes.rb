@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  get  'lead_informations', to: 'lead_informations#index'
+  post  'leads', to: 'leads#create'
   get  'packages', to: 'packages#index'
 end
