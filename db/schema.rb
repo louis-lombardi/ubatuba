@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_10_29_050624) do
+ActiveRecord::Schema.define(version: 2024_10_29_054426) do
+
+  create_table "leads", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "destination"
+    t.string "current_location"
+    t.timestamp "start_date"
+    t.timestamp "end_date"
+    t.integer "travellers_amount"
+    t.string "phone"
+    t.string "email"
+    t.string "name"
+    t.float "budget"
+    t.string "services"
+    t.string "themes"
+    t.integer "duration"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "packages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "destination"
