@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with TAIS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="/favicon.png" type="image/png">
+</head>
+<body>
+    <div class="top-panel-container">
+        <div class="top-panel">
+            <img src="logo.png" alt="Tais Logo" class="logo">
+        </div>
+    </div>
+    <div class="container">
+        <div class="left-panel">
+            <!-- Logo Image -->
+            <img src="logo.png" alt="Tais Logo" class="logo">
+        </div>
+        <div class="right-panel">
+            <div class="chat-box" id="chat-box">
+                <div class="sender-name-left">TAIS</div>
+                <div class="message tais-message">
+                    Olá! 🌟 Eu sou TAIS, o Sistema de Inteligência Artificial de Viagens do PlaceTrip. Estou aqui para te ajudar a criar a viagem dos seus sonhos! Se você tiver alguma dúvida ou quiser iniciar uma solicitação de viagem, fique à vontade para me informar a qualquer momento. Para começarmos, qual destino você gostaria de visitar e que tipo de viagem está buscando? 🌍✈️                </div>
+            </div>
+            <div class="input-section">
+                <input type="text" id="user-input" placeholder="Escreva sua resposta aqui..." onkeydown="handleKeyPress(event)" />
+                <button onclick="sendMessage()" class="send-btn">
+                    ➔
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
