@@ -1,6 +1,6 @@
 // Store conversation history
 const conversationHistory = [];
-const OPENAI_API_KEY = '';
+const OPENAI_API = '';
 
 async function sendMessage() {
     const inputField = document.getElementById('user-input');

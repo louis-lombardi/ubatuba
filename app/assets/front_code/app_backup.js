@@ -1,4 +1,4 @@
-const OPENAI_API_KEY = '';
+const OPENAI_API = '';
 
 // Store conversation history
 const conversationHistory = [];
