@@ -1,6 +1,6 @@
 // Store conversation history
 const conversationHistory = [];
-const OPENAI_API = '';
+const OPENAI_API_KEY = 'sk-TuFK0geEa6s33UO6AmAiIOc4zs3gF8z_JaS10HbdD3T3BlbkFJybAFsCQ1KkR-Mse2FNTaSgBKDkdHI_baisejJSRnkA';
 
 async function sendMessage() {
     const inputField = document.getElementById('user-input');
