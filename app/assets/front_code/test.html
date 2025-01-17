@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Call Buttons</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+        #result { margin-top: 20px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>API Call Test Page</h1>
+    <button onclick="fetchPackages()">GET Packages</button>
+    <button onclick="fetchLeads()">GET Leads</button>
+    <button onclick="postLead()">POST Lead</button>
+    
+    <div id="result">Result will appear here...</div>
+    
+    <script>
+        async function fetchPackages() {
+            try {
+                const response = await fetch('https://api.place-trip.com/packages', {
+                    method: 'GET'
+                });
+                const result = await response.json();
+                document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('result').textContent = 'Error fetching packages: ' + error;
+            }
+        }
+
+        async function fetchLeads() {
+            try {
+                const response = await fetch('https://api.place-trip.com/leads', {
+                    method: 'GET'
+                });
+                const result = await response.json();
+                document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('result').textContent = 'Error fetching leads: ' + error;
+            }
+        }
+
+        async function postLead() {
+            try {
+                const response = await fetch('https://api.place-trip.com/leads', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: "ok" })
+                });
+                const result = await response.json();
+                document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('result').textContent = 'Error posting lead: ' + error;
+            }
+        }
+    </script>
+</body>
+</html>
