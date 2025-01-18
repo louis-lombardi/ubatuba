@@ -3,7 +3,7 @@ class CreateTableLeads < ActiveRecord::Migration[5.2]
       create_table :chat_messages do |t|
         t.string :chat_id
         t.text :content
-        t.string :type
+        t.string :role
 
         t.timestamps
       end
