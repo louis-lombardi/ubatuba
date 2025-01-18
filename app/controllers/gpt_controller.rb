@@ -12,10 +12,10 @@ class GptController < ApplicationController
         ChatMessage.where(chat_id: chat_id).order(:created_at).each do |message|
             body_hash[:messages].push({
                 content: message.content,
-                role: message.type
+                role: message.role
             })
         end
-        ChatMessage.create(chat_id: params[:chat_id], content: params[:content], type: 'user')
+        ChatMessage.create(chat_id: chat_id, content: content, role: 'user')
         body_hash[:messages].push({
             content: params[:content],
             role: 'user'
@@ -25,7 +25,7 @@ class GptController < ApplicationController
         request['Authorization'] = "Bearer #{Rails.application.credentials.gpt_key}"
         response = http.request(request)
         assitant_content = response.body[:choices].first[:message][:content]
-        ChatMessage.create(chat_id: params[:chat_id], content: assitant_content, type: 'assistant')
+        ChatMessage.create(chat_id: chat_id, content: assitant_content, role: 'assistant')
         render json: {content: assitant_content}
     end
 
@@ -35,6 +35,10 @@ class GptController < ApplicationController
 
     def chat_id
         @chat_id ||= params[:chat_id]
+    end
+
+    def content
+        params[:content]
     end
 
 
