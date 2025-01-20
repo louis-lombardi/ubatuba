@@ -1,0 +1,16 @@
+class AddLeads < ActiveRecord::Migration[5.2]
+    def change
+        rename_column :leads, :current_location, :origin
+        rename_column :leads, :travellers_amount, :amount_people
+        rename_column :leads, :services, :activities
+        rename_column :leads, :themes, :accomodations
+        add_column :leads, :dates, :string
+        add_column :leads, :additional_informations, :string
+        add_column :leads, :want_flight, :boolean
+        add_column :leads, :want_transfer, :boolean
+        add_column :leads, :amount_children, :integer
+        remove_column :leads, :start_date
+        remove_column :leads, :end_date
+    end
+end
+
