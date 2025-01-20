@@ -28,9 +28,13 @@ class GptController < ApplicationController
             request['Content-Type'] = 'application/json'
             request['Authorization'] = "Bearer #{Rails.application.credentials.gpt_key}"
             response = http.request(request)
-            assitant_content = JSON.parse(response.body)['choices'].first['message']['content']
-            lead_params = assitant_content.split('```')[1].gsub("\n",'').gsub('json','')
-            Lead.create!(lead_params)
+            assistant_content = JSON.parse(response.body)['choices'].first['message']['content']
+            begin
+                lead_params = assistant_content.split('```')[1].gsub("\n",'').gsub('json','')
+            rescue
+                lead_params = assistant_content
+            end
+            Lead.create!(JSON.parse(lead_params))
             render json: {success: true}
         else
             uri = URI.parse('https://api.openai.com/v1/chat/completions')
@@ -119,7 +123,7 @@ class GptController < ApplicationController
         - destination (string)
         - dates (string)
         - want_flight (boolean)
-        -want_transfers (boolean)
+        -want_transfer (boolean)
         - accomodations (string)
         - activities (string)
         - amount_people (int, including children)

@@ -35,7 +35,7 @@ class EmailService
     def self.customer_text(lead)
 "Olá,
 Estamos super animados por ajudar a planejar sua próxima aventura! Aqui está um resumo das informações que você nos enviou. Assim, podemos garantir que sua experiência será exatamente como você deseja:
-<strong> Detalhes da sua viagem </strong>
+Detalhes da sua viagem
 #{travel_summary(lead)}
 O que acontece agora?
 Compartilhamos essas informações com agências de viagens parceiras que vão
@@ -53,7 +53,7 @@ place-trip.com"
     def self.seller_text(lead)
 "Olá,
 Recebemos uma nova solicitação de viagem gerada pela PlaceTrip. Abaixo estão todas as informações fornecidas pelo visitante para que você possa entender melhor suas necessidades e oferecer uma proposta personalizada.
-<strong> Informações de contato do visitante </strong>
+Informações de contato do visitante
 - Email: #{lead.email}
 #{travel_summary(lead)}
 Estamos à disposição para qualquer esclarecimento. Não hesite em entrar em contato diretamente com o visitante para apresentar uma proposta.
@@ -70,7 +70,7 @@ def self.travel_summary(lead)
 - Orçamento estimado: R$ #{lead.budget}
 - Duração desejada: #{lead.duration} dias
 - Período para a viagem: #{lead.dates}
-- Nível de hospedagem: #{lead.accomodation}
+- Nível de hospedagem: #{lead.accomodations}
 - Itens incluídos no pacote:
     * Voos: #{lead.want_flights ? 'Sim' : 'Não'}
     * Transfers: #{lead.want_transfers ? 'Sim' : 'Não'}
