@@ -119,7 +119,7 @@ class GptController < ApplicationController
     end
 
     def sumup_message
-        {role: 'system', content: "Now, please sum up the responses in a json containing following fields:
+        {role: 'system', content: "Now, please sum up the responses in a json containing following fields (in no case you will include comments inside the json):
         - email (string)
         - origin (string)
         - destination (string)
