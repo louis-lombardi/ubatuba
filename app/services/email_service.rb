@@ -10,7 +10,7 @@ class EmailService
         send_seller(lead)
     end
 
-    def send_customer(lead)
+    def self.send_customer(lead)
         Mailjet::Send.create(messages: [{
             'From'=> {
                 'Email'=> 'louis.lombardi@place-trip.com',
@@ -25,7 +25,7 @@ class EmailService
         }])
     end
 
-    def send_seller(lead)
+    def self.send_seller(lead)
         Mailjet::Send.create(messages: [{
             'From'=> {
                 'Email'=> 'louis.lombardi@place-trip.com',
