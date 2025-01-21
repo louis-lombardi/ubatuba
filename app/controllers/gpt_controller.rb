@@ -2,33 +2,11 @@ class GptController < ApplicationController
 
     def send_gpt
         if params[:user_response] == "no"
-            ChatMessage.create(chat_id: chat_id, role: 'not_authorized') if params[:user_response] == "no"
+            ChatMessage.create(chat_id: chat_id, role: 'not_authorized')
             render json: {success: true}
         elsif params[:user_response] == "yes"
-            ChatMessage.create(chat_id: chat_id, role: 'authorized') if params[:user_response] == "yes"
-            uri = URI.parse('https://api.openai.com/v1/chat/completions')
-            http = Net::HTTP.new(uri.host, uri.port)
-            http.use_ssl = true
-            request = Net::HTTP::Post.new(uri.request_uri)
-            body_hash = {
-                model: "gpt-4o-mini",
-                messages: [prescript, first_message, second_message] 
-            }
-            ChatMessage.where(chat_id: chat_id).where.not(role: ['end','authorized','not_authorized']).order(:created_at).each do |message|
-                body_hash[:messages].push({
-                    content: message.content,
-                    role: message.role
-                })
-            end
-            body_hash[:messages].push({
-                content: sumup_message,
-                role: 'system'
-            })
-            request.body= body_hash.to_json
-            request['Content-Type'] = 'application/json'
-            request['Authorization'] = "Bearer #{Rails.application.credentials.gpt_key}"
-            response = http.request(request)
-            assistant_content = JSON.parse(response.body)['choices'].first['message']['content']
+            ChatMessage.create(chat_id: chat_id, role: 'authorized')
+            assistant_content = send_request(body_hash_lead)
             begin
                 lead_params = assistant_content.split('```')[1].gsub("\n",'').gsub('json','')
             rescue
@@ -37,30 +15,8 @@ class GptController < ApplicationController
             Lead.create!(JSON.parse(lead_params))
             render json: {success: true}
         else
-            uri = URI.parse('https://api.openai.com/v1/chat/completions')
-            http = Net::HTTP.new(uri.host, uri.port)
-            http.use_ssl = true
-            request = Net::HTTP::Post.new(uri.request_uri)
-            body_hash = {
-                model: "gpt-4o-mini",
-                messages: [prescript, first_message, second_message] 
-            }
-            ChatMessage.where(chat_id: chat_id).where.not(role: ['end','authorized','not_authorized']).order(:created_at).each do |message|
-                body_hash[:messages].push({
-                    content: message.content,
-                    role: message.role
-                })
-            end
             ChatMessage.create(chat_id: chat_id, content: content, role: 'user')
-            body_hash[:messages].push({
-                content: content,
-                role: 'user'
-            })
-            request.body= body_hash.to_json
-            request['Content-Type'] = 'application/json'
-            request['Authorization'] = "Bearer #{Rails.application.credentials.gpt_key}"
-            response = http.request(request)
-            assitant_content = JSON.parse(response.body)['choices'].first['message']['content']
+            assitant_content = send_request(body_hash_response)
             if assitant_content.include?("ENDING_CHAT")
                 ChatMessage.create(chat_id: chat_id, role: 'end') 
                 render json: {content: 'ENDING_CHAT'}
@@ -69,6 +25,52 @@ class GptController < ApplicationController
                 render json: {content: assitant_content}
             end
         end
+    end
+
+
+    def send_request(body_hash)
+        uri = URI.parse('https://api.openai.com/v1/chat/completions')
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.request_uri)
+        request.body= body_hash.to_json
+        request['Content-Type'] = 'application/json'
+        request['Authorization'] = "Bearer #{Rails.application.credentials.gpt_key}"
+        response = http.request(request)
+        JSON.parse(response.body)['choices'].first['message']['content']
+    end
+
+    def body_hash_lead
+        body_hash = {
+            model: "gpt-4o-mini",
+            messages: [prescript, first_message, second_message] 
+        }
+        ChatMessage.where(chat_id: chat_id).where.not(role: ['end','authorized','not_authorized']).order(:created_at).each do |message|
+            body_hash[:messages].push({
+                content: message.content,
+                role: message.role
+            })
+        end
+        body_hash[:messages].push(sumup_message)
+        body_hash
+    end
+
+    def body_hash_response
+        body_hash = {
+            model: "gpt-4o-mini",
+            messages: [prescript, first_message, second_message] 
+        }
+        ChatMessage.where(chat_id: chat_id).where.not(role: ['end','authorized','not_authorized']).order(:created_at).each do |message|
+            body_hash[:messages].push({
+                content: message.content,
+                role: message.role
+            })
+        end
+        body_hash[:messages].push({
+            content: content,
+            role: 'user'
+        })
+        body_hash
     end
 
 
@@ -117,7 +119,7 @@ class GptController < ApplicationController
     end
 
     def sumup_message
-        "Now, please sum up the responses in a json containing following fields:
+        {role: 'system', content: "Now, please sum up the responses in a json containing following fields:
         - email (string)
         - origin (string)
         - destination (string)
@@ -130,8 +132,8 @@ class GptController < ApplicationController
         - amount_children (int)
         -budget (int, must be the total budget, in BRL)
         -duration (int, in days, you can convert from weeks or month if needed)
-        -additional_informations (string)"
-        end
+        -additional_informations (string)"}
+    end
 
     def chat_id
         @chat_id ||= params[:chat_id]
