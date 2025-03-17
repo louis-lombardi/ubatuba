@@ -13,7 +13,7 @@ class EmailService
     def self.send_customer(lead)
         Mailjet::Send.create(messages: [{
             'From'=> {
-                'Email'=> 'louis.lombardi@place-trip.com',
+                'Email'=> 'contact@place-trip.com',
                 'Name'=> 'Place Trip'
             },
             'To'=> [{
@@ -28,11 +28,11 @@ class EmailService
     def self.send_seller(lead)
         Mailjet::Send.create(messages: [{
             'From'=> {
-                'Email'=> 'louis.lombardi@place-trip.com',
+                'Email'=> 'contact@place-trip.com',
                 'Name'=> 'Place Trip'
             },
             'To'=> [{
-                'Email'=> 'louis.lombardi@place-trip.com', 
+                'Email'=> 'leads@place-trip.com', 
                 'Name'=> 'Louis PlaceTrip'
             }],
             'Subject': "Nova solicitação de viagem via PlaceTrip",
