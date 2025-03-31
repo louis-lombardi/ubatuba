@@ -4,7 +4,7 @@ class AddLogs < ActiveRecord::Migration[5.2]
         t.string :source
         t.string :error
         t.text :backtrace
-        t.jsonb :additional_info
+        t.json :additional_info
   
         t.timestamps
       end
