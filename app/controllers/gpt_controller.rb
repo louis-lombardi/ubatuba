@@ -25,8 +25,9 @@ class GptController < ApplicationController
                 render json: {content: assitant_content}
             end
         end
+    rescue => e
+        Log.create(source: 'gpt_controller#send_gpt', backtrace: e.backtrace, source: e, additional_info: params)
     end
-
 
     def send_request(body_hash)
         uri = URI.parse('https://api.openai.com/v1/chat/completions')
