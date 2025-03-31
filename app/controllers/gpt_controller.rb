@@ -26,7 +26,7 @@ class GptController < ApplicationController
             end
         end
     rescue => e
-        Log.create(source: 'gpt_controller#send_gpt', backtrace: e.backtrace, source: e, additional_info: params)
+        Log.create(source: 'gpt_controller#send_gpt', backtrace: e.backtrace, error: e, additional_info: params.to_json)
     end
 
     def send_request(body_hash)
