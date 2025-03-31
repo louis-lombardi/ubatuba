@@ -131,7 +131,7 @@ class GptController < ApplicationController
         - activities (string)
         - amount_people (int, including children)
         - amount_children (int)
-        -budget (int, must be the total budget, in BRL. Important: if the budget was passed in dollars, convert it to BRL using an exchange rate of 5.6)
+        -budget (int, must be the total budget, in BRL. Important: if the budget was passed in dollars, convert it to BRL using an exchange rate of 5.6. You must also pay attention if the user passed the budget per day, per person, or per day and person. In that cases, you have to do the necessary computations to get the total budget for the whole duration and all the travelers )
         -duration (int, in days, you can convert from weeks or month if needed)
         -additional_informations (string)"}
     end
