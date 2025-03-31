@@ -1,7 +1,7 @@
 class GptController < ApplicationController
 
     def send_gpt
-        ip_address = request_headers["X-Forwarded-For"]
+        ip_address = request.headers["X-Forwarded-For"]
         return if Log.where("created_at >= ?", 1.hour.ago).where(source: "ip_count").where(error: ip_address).count > 2000
         
         Log.create(source: "ip_count", error: ip_address)
