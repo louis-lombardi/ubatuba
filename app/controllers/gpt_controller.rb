@@ -22,7 +22,7 @@ class GptController < ApplicationController
             rescue
                 lead_params = assistant_content
             end
-            Lead.create!(JSON.parse(lead_params))
+            Lead.create!(JSON.parse(lead_params), chat_id: chat_id)
             render json: {success: true}
         else
             ChatMessage.create(chat_id: chat_id, content: content, role: 'user')
