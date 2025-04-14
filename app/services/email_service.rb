@@ -8,7 +8,7 @@ class EmailService
         end
         send_customer(lead)
         send_seller(lead)
-        send_from(lead)
+        send_form(lead)
     end
 
     def self.send_customer(lead)
