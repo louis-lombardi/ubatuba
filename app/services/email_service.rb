@@ -8,6 +8,7 @@ class EmailService
         end
         send_customer(lead)
         send_seller(lead)
+        send_from(lead)
     end
 
     def self.send_customer(lead)
@@ -25,6 +26,21 @@ class EmailService
         }])
     end
 
+        def self.send_form(lead)
+        Mailjet::Send.create(messages: [{
+            'From'=> {
+                'Email'=> 'contact@place-trip.com',
+                'Name'=> 'Place Trip'
+            },
+            'To'=> [{
+                'Email'=> lead.email, 
+                'Name'=> 'Customer'
+            }],
+            'Subject': "Um pequeno feedback sobre sua experiencia com a TAIS",
+            'HtmlPart'=> form_text,
+        }])
+    end
+
     def self.send_seller(lead)
         Mailjet::Send.create(messages: [{
             'From'=> {
@@ -39,6 +55,39 @@ class EmailService
             'HtmlPart'=> seller_text(lead),
         }])
     end
+
+    def self.form_text
+        "
+<!DOCTYPE html>
+<html lang=\"pt-BR\">
+<head>
+    <meta charset=\"UTF-8\">
+    <title>Feedback TAIS</title>
+</head>
+<body style=\"font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;\">
+    <div style=\"max-width: 600px; margin: auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);\">
+        <h2 style=\"color: #333;\">Conta pra gente o que achou da sua experiência com a TAIS?</h2>
+        <p>Olá!</p>
+        <p>Muito obrigado por utilizar a TAIS – nossa assistente de viagem inteligente! Esperamos que ela tenha te ajudado a encontrar o pacote perfeito ou, pelo menos, te dado uma boa dose de inspiração. ✈️🌍</p>
+        <p>Estamos sempre buscando melhorar a experiência dos nossos usuários, e sua opinião é essencial nesse processo. Leva menos de 2 minutinhos e vai nos ajudar (muito!) a evoluir. 🙌</p>
+        <p style=\"text-align: center;\">
+            <a href=\"https://example.com/formulario-feedback\" style=\"display: inline-block; background-color: #0099cc; color: white; padding: 12px 24px; border-radius: 5px; text-decoration: none; font-weight: bold;\">
+                Responder ao formulário
+            </a>
+        </p>
+        <p>Queremos saber:</p>
+        <ul>
+            <li>Se algo não funcionou como esperado 🤔</li>
+            <li>Se encontrou algum bug 🐞</li>
+            <li>Se tem ideias de melhorias 💡</li>
+            <li>Ou simplesmente como foi sua experiência geral! 😄</li>
+        </ul>
+        <p>Agradecemos de coração por fazer parte dessa jornada com a gente.</p>
+        <p>Um abraço,<br><strong>Equipe PlaceTrip</strong></p>
+    </div>
+</body>
+</html>"
+end
 
     def self.customer_text(lead)
         "<!DOCTYPE html>
