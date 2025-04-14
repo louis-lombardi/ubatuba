@@ -8,6 +8,12 @@ class GptController < ApplicationController
         if params[:user_response] == "no"
             ChatMessage.create(chat_id: chat_id, role: 'not_authorized')
             render json: {success: true}
+        elsif params[:user_response] == "config_traveller"
+             ChatMessage.create(chat_id: chat_id, role: 'config_traveller')
+            render json: {success: true}
+        elsif params[:user_response] == "config_pro"
+             ChatMessage.create(chat_id: chat_id, role: 'config_pro')
+            render json: {success: true}
         elsif params[:user_response] == "yes"
             ChatMessage.create(chat_id: chat_id, role: 'authorized')
             assistant_content = send_request(body_hash_lead)
