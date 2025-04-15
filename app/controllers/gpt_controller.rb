@@ -99,7 +99,8 @@ class GptController < ApplicationController
         the type of trip (beach, romantic, sports, cultural, etc.)
         ask for confirmation of you understanding.
         The number of people (and if there are any children)
-        The duration and total budget of the trip
+        The duration of the trip
+        The budget of the trip (pay attention, the user might inform the budget per person, per day, per person and date, or total for the whole duration and all the people. If you have a doubt on what he meant, just ask for confiration.
         Ask from where he leaves.
         Then, delve deeper into:
         Desired dates
