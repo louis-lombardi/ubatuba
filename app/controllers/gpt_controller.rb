@@ -5,7 +5,7 @@ class GptController < ApplicationController
         return if Log.where("created_at >= ?", 1.hour.ago).where(source: "ip_count").where(error: ip_address).count > 2000
         
         Log.create(source: "ip_count", error: ip_address)
-        if params[:user_response] == "no"
+        if params[:user_response] == "config_no"
             ChatMessage.create(chat_id: chat_id, role: 'not_authorized')
             render json: {success: true}
         elsif params[:user_response] == "config_traveller"
@@ -14,7 +14,7 @@ class GptController < ApplicationController
         elsif params[:user_response] == "config_pro"
              ChatMessage.create(chat_id: chat_id, role: 'config_pro')
             render json: {success: true}
-        elsif params[:user_response] == "yes"
+        elsif params[:user_response] == "config_yes"
             ChatMessage.create(chat_id: chat_id, role: 'authorized')
             assistant_content = send_request(body_hash_lead)
             begin
