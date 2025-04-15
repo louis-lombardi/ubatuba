@@ -106,6 +106,7 @@ class GptController < ApplicationController
         Type of accommodations
         Whether they want plane tickets and transfers included in the offer, 
         Ask if we want you add on-site activities, and if so, what type of activities. Make some propositions
+        If the user gives you some information and answers before you ask them, no need to ask the questions again, just consider you have already the info
         If you haven't obtained certain information, try to ask for it once more but only once (except for the number of people, the budget, the destination and the type of trip, these are mandatory) .
         
         When you have gathered all the information, ask the user if there is something he wants to add.
