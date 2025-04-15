@@ -56,7 +56,7 @@ class GptController < ApplicationController
             model: "gpt-4o-mini",
             messages: [prescript, first_message, second_message] 
         }
-        ChatMessage.where(chat_id: chat_id).where.not(role: ['end','authorized','not_authorized']).order(:created_at).each do |message|
+        ChatMessage.where(chat_id: chat_id).where.not(role: ['config_pro','config_traveller','end','authorized','not_authorized']).order(:created_at).each do |message|
             body_hash[:messages].push({
                 content: message.content,
                 role: message.role
@@ -71,7 +71,7 @@ class GptController < ApplicationController
             model: "gpt-4o-mini",
             messages: [prescript, first_message, second_message] 
         }
-        ChatMessage.where(chat_id: chat_id).where.not(role: ['end','authorized','not_authorized']).order(:created_at).each do |message|
+        ChatMessage.where(chat_id: chat_id).where.not(role: ['config_pro','config_traveller','end','authorized','not_authorized']).order(:created_at).each do |message|
             body_hash[:messages].push({
                 content: message.content,
                 role: message.role
