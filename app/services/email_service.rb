@@ -38,7 +38,7 @@ class EmailService
                 'Email'=> lead.email, 
                 'Name'=> 'Customer'
             }],
-            'Subject': "Um pequeno feedback sobre sua experiencia com a TAIS",
+            'Subject': "Um pequeno feedback sobre a sua experiência com a TAIS",
             'HtmlPart'=> form_text,
         }])
     end
@@ -73,7 +73,7 @@ class EmailService
         <p>Muito obrigado por utilizar a TAIS – nossa assistente de viagem inteligente! Esperamos que ela tenha te ajudado a encontrar o pacote perfeito ou, pelo menos, te dado uma boa dose de inspiração. ✈️🌍</p>
         <p>Estamos sempre buscando melhorar a experiência dos nossos usuários, e sua opinião é essencial nesse processo. Leva menos de 2 minutinhos e vai nos ajudar (muito!) a evoluir. 🙌</p>
         <p style=\"text-align: center;\">
-            <a href=\"https://example.com/formulario-feedback\" style=\"display: inline-block; background-color: #0099cc; color: white; padding: 12px 24px; border-radius: 5px; text-decoration: none; font-weight: bold;\">
+            <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSfJmIVb-vSXMYxCfuDBcFlFwsbYIr-RxvHsAElc1zrAaA68EQ/viewform\" style=\"display: inline-block; background-color: #0099cc; color: white; padding: 12px 24px; border-radius: 5px; text-decoration: none; font-weight: bold;\">
                 Responder ao formulário
             </a>
         </p>
@@ -88,7 +88,8 @@ class EmailService
         <p>Um abraço,<br><strong>Equipe PlaceTrip</strong></p>
     </div>
 </body>
-</html>"
+</html>
+"
 end
 
     def self.customer_text(lead)
