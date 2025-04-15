@@ -6,10 +6,10 @@ class EmailService
             config.secret_key = "4b591b3dac7f33a0f3a56459f44d0bfd"
             config.api_version = "v3.1"
         end
-        unless ChatMessage.where(lead.chat_id: chat_id, role: 'config_pro').any?
+        #unless ChatMessage.where(lead.chat_id: chat_id, role: 'config_pro').any?
             send_customer(lead)
             send_form(lead)
-        end
+        #end
         send_seller(lead)
     end
 
