@@ -166,9 +166,9 @@ class GptController < ApplicationController
 
   def current_profile
     if ChatMessage.where(chat_id: chat_id, role: 'config_pro').any?
-      'config_pro'
+      'Profissional do Turismo'
     else
-      'config_traveller'
+      'Viajante'
     end
   end
 
