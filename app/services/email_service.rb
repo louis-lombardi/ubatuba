@@ -106,6 +106,7 @@ end
         <p>Estamos super animados por ajudar a planejar sua próxima aventura! Aqui está um resumo das informações que você nos enviou. Assim, podemos garantir que sua experiência será exatamente como você deseja:</p>
         <h2 style=\"color: #21c2d1;\">Detalhes da sua viagem</h2>
         <ul>
+        <li><strong>Perfil de usuario:</strong> #{lead.profile}</li>
         <li><strong>Local de partida:</strong> #{lead.origin}</li>
         <li><strong>Destino e tipo de viagem:</strong> #{lead.destination}</li>
         <li><strong>Número de pessoas:</strong> #{lead.amount_people - lead.amount_children} adulto(s), #{lead.amount_children} criança(s)</li>
