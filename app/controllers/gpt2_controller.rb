@@ -20,8 +20,10 @@ class Gpt2Controller < ApplicationController
         WhatsAppservice.new(assitant_content, number).call
       end
     end
+    render json: {success: true}
   rescue => e
       Log.create(source: 'gpt_controller#send_gpt_whats', backtrace: e.backtrace, error: e, additional_info: params.to_json)
+    render json: {success: false}
   end
 
   def number
