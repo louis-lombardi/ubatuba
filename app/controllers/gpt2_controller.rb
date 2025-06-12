@@ -51,6 +51,7 @@ class Gpt2Controller < ApplicationController
     request['Content-Type'] = 'application/json'
     request['Authorization'] = "Bearer #{Rails.application.credentials.gpt_key}"
     response = http.request(request)
+    Log.create(source: 'gpt_response', additional_info: response.body)
     JSON.parse(response.body)['choices'].first['message']['content']
   end
 
