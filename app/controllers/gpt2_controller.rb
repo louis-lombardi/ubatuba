@@ -4,20 +4,20 @@ class Gpt2Controller < ApplicationController
     user = WhatsappUser.find_by(number: number)
     if user.nil?
       user = WhatsappUser.create(number: number, current_chat_id: SecureRandom.uuid, last_connect: DateTime.now)
-      WhatsAppservice.new(welcome_message, number).call
+      WhatsappService.new(welcome_message, number).call
     elsif user.last_connect < DateTime.now - 12.hours
       user.update(current_chat_id: SecureRandom.uuid,last_connect: DateTime.now)
-      WhatsAppservice.new(welcome_message, number).call
+      WhatsappService.new(welcome_message, number).call
     else
       chat_id = user.current_chat_id
       ChatMessage.create(chat_id: chat_id, content: content, role: 'user')
       assitant_content = send_request(body_hash_response(chat_id))
       if assitant_content.include?("ENDING_CHAT")
         ChatMessage.create(chat_id: chat_id, role: 'end') 
-        WhatsAppservice.new(agreement_message, number).call
+        WhatsappService.new(agreement_message, number).call
       else
         ChatMessage.create(chat_id: chat_id, content: assitant_content.gsub(/[^\u0000-\u00FF]/, ''), role: 'assistant')
-        WhatsAppservice.new(assitant_content, number).call
+        WhatsappService.new(assitant_content, number).call
       end
     end
     render json: {success: true}
