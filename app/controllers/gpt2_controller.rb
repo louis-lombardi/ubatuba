@@ -10,7 +10,7 @@ class Gpt2Controller < ApplicationController
     if ChatMessage.where(chat_id: chat_id, role: 'end').any? && !ChatMessage.where(chat_id: chat_id, role: 'partial_no').any?
       if content.in?(%w[sim SIM Sim simm ok OK Ok])
        ChatMessage.create(chat_id: chat_id, role: 'authorized')
-        assistant_content = send_request(body_hash_lead)
+        assistant_content = send_request(body_hash_lead(chat_id))
         begin
           lead_params = assistant_content.split('```')[1].gsub("\n",'').gsub('json','')
         rescue
@@ -28,7 +28,7 @@ class Gpt2Controller < ApplicationController
     elsif ChatMessage.where(chat_id: chat_id, role: 'end').any? && ChatMessage.where(chat_id: chat_id, role: 'partial_no').any?
       if content.in?(%w[sim SIM Sim simm ok OK Ok])
        ChatMessage.create(chat_id: chat_id, role: 'authorized')
-        assistant_content = send_request(body_hash_lead)
+        assistant_content = send_request(body_hash_lead(chat_id))
         begin
           lead_params = assistant_content.split('```')[1].gsub("\n",'').gsub('json','')
         rescue
@@ -90,7 +90,7 @@ class Gpt2Controller < ApplicationController
     JSON.parse(response.body)['choices'].first['message']['content']
   end
 
-  def body_hash_lead
+  def body_hash_lead(chat_id)
     body_hash = {
         model: "gpt-4o-mini",
         messages: [prescript, first_message, second_message] 
