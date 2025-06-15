@@ -38,6 +38,7 @@ class Gpt2Controller < ApplicationController
         WhatsappService.new(thanks_message, number).call
       elsif content.in?(%w[nao Nao NAO Não não NÃO])
         ChatMessage.create(chat_id: chat_id, role: 'no') 
+        user.delete
         WhatsappService.new(too_bad_message, number).call
       else
         WhatsappService.new(nil, number).call_not_understood
