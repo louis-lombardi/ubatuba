@@ -6,16 +6,54 @@ class Gpt2Controller < ApplicationController
       user = WhatsappUser.create(number: number, current_chat_id: SecureRandom.uuid, last_connect: DateTime.now)
       WhatsappService.new(welcome_message, number).call
     end
+    if ChatMessage.where(chat_id: chat_id, role: 'end').any? && !ChatMessage.where(chat_id: chat_id, role: 'partial_no').any?
+      if content.in?(%w[sim SIM Sim simm ok OK Ok])
+       ChatMessage.create(chat_id: chat_id, role: 'authorized')
+        assistant_content = send_request(body_hash_lead)
+        begin
+          lead_params = assistant_content.split('```')[1].gsub("\n",'').gsub('json','')
+        rescue
+          lead_params = assistant_content
+        end
+        Lead.create!(JSON.parse(lead_params).merge(chat_id: chat_id, profile: current_profile).as_json)
+        user.delete
+        WhatsappService.new(thanks, number).call
+      elsif content.in?(%w[nao Nao NAO Não não NÃO])
+        ChatMessage.create(chat_id: chat_id, role: 'partial_no') 
+        WhatsappService.new(nil, number).call_verification
+      else
+        WhatsappService.new(nil, number).call_not_understood
+      end
+    elsif ChatMessage.where(chat_id: chat_id, role: 'end').any? && ChatMessage.where(chat_id: chat_id, role: 'partial_no').any?
+      if content.in?(%w[sim SIM Sim simm ok OK Ok])
+       ChatMessage.create(chat_id: chat_id, role: 'authorized')
+        assistant_content = send_request(body_hash_lead)
+        begin
+          lead_params = assistant_content.split('```')[1].gsub("\n",'').gsub('json','')
+        rescue
+          lead_params = assistant_content
+        end
+        Lead.create!(JSON.parse(lead_params).merge(chat_id: chat_id, profile: current_profile).as_json)
+        user.delete
+        WhatsappService.new(thanks_message, number).call
+      elsif content.in?(%w[nao Nao NAO Não não NÃO])
+        ChatMessage.create(chat_id: chat_id, role: 'no') 
+        WhatsappService.new(too_bad_message, number).call
+      else
+        WhatsappService.new(nil, number).call_not_understood
+      end
+    else
       chat_id = user.current_chat_id
       ChatMessage.create(chat_id: chat_id, content: content, role: 'user')
       assitant_content = send_request(body_hash_response(chat_id))
       if assitant_content.include?("ENDING_CHAT")
         ChatMessage.create(chat_id: chat_id, role: 'end') 
-        WhatsappService.new(agreement_message, number).call
+        WhatsappService.new(nil, number).call_agreement
       else
         ChatMessage.create(chat_id: chat_id, content: assitant_content.gsub(/[^\u0000-\u00FF]/, ''), role: 'assistant')
         WhatsappService.new(assitant_content, number).call
       end
+    end
     render json: {success: true}
   rescue => e
       Log.create(source: 'gpt_controller#send_gpt_whats', backtrace: e.backtrace, error: e, additional_info: params.to_json)
@@ -56,7 +94,7 @@ class Gpt2Controller < ApplicationController
         model: "gpt-4o-mini",
         messages: [prescript, first_message, second_message] 
     }
-    ChatMessage.where(chat_id: chat_id).where.not(role: ['config_pro','config_traveller','end','authorized','not_authorized']).order(:created_at).each do |message|
+    ChatMessage.where(chat_id: chat_id).where.not(role: ['config_pro','config_traveller','end','authorized','not_authorized', 'partial_no']).order(:created_at).each do |message|
         body_hash[:messages].push({
             content: message.content,
             role: message.role
@@ -71,7 +109,7 @@ class Gpt2Controller < ApplicationController
         model: "gpt-4o-mini",
         messages: [prescript, first_message, second_message] 
     }
-    ChatMessage.where(chat_id: chat_id).where.not(role: ['config_pro','config_traveller','end','authorized','not_authorized']).order(:created_at).each do |message|
+    ChatMessage.where(chat_id: chat_id).where.not(role: ['config_pro','config_traveller','end','authorized','not_authorized', 'partial_no']).order(:created_at).each do |message|
         body_hash[:messages].push({
             content: message.content,
             role: message.role
@@ -160,5 +198,12 @@ class Gpt2Controller < ApplicationController
     -additional_informations (string)"}
   end
 
+  def thanks_message
+    "Ótimo! Até logo e estarei por aqui caso precisar de mim novamente"
+  end
+
+  def too_bad_message
+    "Sem problemas, estarei por aqui caso precisar de mim novamente"
+  end
 end
 
