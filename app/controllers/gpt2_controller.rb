@@ -6,6 +6,7 @@ class Gpt2Controller < ApplicationController
       user = WhatsappUser.create(number: number, current_chat_id: SecureRandom.uuid, last_connect: DateTime.now)
       WhatsappService.new(welcome_message, number).call
     end
+    chat_id = user.current_chat_id
     if ChatMessage.where(chat_id: chat_id, role: 'end').any? && !ChatMessage.where(chat_id: chat_id, role: 'partial_no').any?
       if content.in?(%w[sim SIM Sim simm ok OK Ok])
        ChatMessage.create(chat_id: chat_id, role: 'authorized')
@@ -44,7 +45,6 @@ class Gpt2Controller < ApplicationController
         WhatsappService.new(nil, number).call_not_understood
       end
     else
-      chat_id = user.current_chat_id
       ChatMessage.create(chat_id: chat_id, content: content, role: 'user')
       assitant_content = send_request(body_hash_response(chat_id))
       if assitant_content.include?("ENDING_CHAT")
