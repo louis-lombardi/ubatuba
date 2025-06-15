@@ -1,0 +1,47 @@
+# .github/workflows/deploy.yml
+
+# Name of the workflow
+name: Deploy to Server
+
+# Controls when the action will run. 
+# This workflow runs on a push to the 'main' branch.
+# It also includes 'workflow_dispatch' to allow manual triggering from the Actions tab.
+on:
+  push:
+    branches:
+      - main # Or your default branch, e.g., master
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deploy"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Step 1: Check out the repository's code so the runner can access it
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Execute the SSH command to run the deploy script
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          # Get the host, username, and private key from GitHub Secrets
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+          # The port for the SSH connection, 22 is the default
+          port: 22
+          
+          # The script to execute on the remote server
+          # This command changes to the appropriate directory and runs your deployment script.
+          # You might need to adjust the path to your deploy script.
+          script: |
+            echo "🚀 Starting deployment..."
+            ./deploy.sh
+            echo "✅ Deployment finished successfully."
+
