@@ -8,7 +8,7 @@ class Gpt2Controller < ApplicationController
     end
     chat_id = user.current_chat_id
     if ChatMessage.where(chat_id: chat_id, role: 'authorized').any? || ChatMessage.where(chat_id: chat_id, role: 'not_authorized').any?
-      if content =="Começar novo atendimento"
+      if content =="Começar"
         user.delete
         user = WhatsappUser.create(number: number, current_chat_id: SecureRandom.uuid, last_connect: DateTime.now)
         WhatsappService.new(new_chat_message, number).call
