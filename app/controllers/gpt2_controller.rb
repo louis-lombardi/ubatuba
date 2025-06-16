@@ -7,7 +7,15 @@ class Gpt2Controller < ApplicationController
       WhatsappService.new(welcome_message, number).call
     end
     chat_id = user.current_chat_id
-    if ChatMessage.where(chat_id: chat_id, role: 'end').any? && !ChatMessage.where(chat_id: chat_id, role: 'partial_no').any?
+    if ChatMessage.where(chat_id: chat_id, role: 'authorized').any? || ChatMessage.where(chat_id: chat_id, role: 'not_authorized').any?
+      if content =="Quero começar um novo atendimento"
+        user.delete
+        user = WhatsappUser.create(number: number, current_chat_id: SecureRandom.uuid, last_connect: DateTime.now)
+        WhatsappService.new(new_chat_message, number).call
+      else
+        WhatsappService.new(nil, number).new_chat_not_understood
+      end
+    elsif ChatMessage.where(chat_id: chat_id, role: 'end').any? && !ChatMessage.where(chat_id: chat_id, role: 'partial_no').any?
       if content.in?(%w[sim SIM Sim simm ok OK Ok])
        ChatMessage.create(chat_id: chat_id, role: 'authorized')
         assistant_content = send_request(body_hash_lead(chat_id))
@@ -17,8 +25,8 @@ class Gpt2Controller < ApplicationController
           lead_params = assistant_content
         end
         Lead.create!(JSON.parse(lead_params).merge(chat_id: chat_id, profile: current_profile, whats_number: number.split(':')[1]).as_json)
-        user.delete
         WhatsappService.new(thanks, number).call
+        WhatsappService.new(nil, number).call_new_chat
       elsif content.in?(%w[nao Nao NAO Não não NÃO])
         ChatMessage.create(chat_id: chat_id, role: 'partial_no') 
         WhatsappService.new(nil, number).call_verification
@@ -35,12 +43,12 @@ class Gpt2Controller < ApplicationController
           lead_params = assistant_content
         end
         Lead.create!(JSON.parse(lead_params).merge(chat_id: chat_id, profile: current_profile, whats_number: number.split(':')[1]).as_json)
-        user.delete
         WhatsappService.new(thanks_message, number).call
+        WhatsappService.new(nil, number).call_new_chat
       elsif content.in?(%w[nao Nao NAO Não não NÃO])
-        ChatMessage.create(chat_id: chat_id, role: 'no') 
-        user.delete
+        ChatMessage.create(chat_id: chat_id, role: 'not_authorized') 
         WhatsappService.new(too_bad_message, number).call
+        WhatsappService.new(nil, number).call_new_chat
       else
         WhatsappService.new(nil, number).call_not_understood
       end
@@ -205,6 +213,10 @@ class Gpt2Controller < ApplicationController
 
   def too_bad_message
     "Sem problemas, estarei por aqui caso precisar de mim novamente"
+  end
+
+  def new_chat_message
+    "Olá novamente! 🌟 Me conte: qual é o seu destino e que tipo de viagem você está pensando? (Praia, romântica, esportiva, cultural, etc.) Estou aqui para ajudar! 🌍✈️"
   end
 end
 
