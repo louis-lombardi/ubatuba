@@ -25,15 +25,15 @@ class WhatsappService
   end
 
   def call_new_chat_not_understood
-     call_template("HX8bdbe7315ad3fff47c73822ea5af70d4")
+     call_template("HX4b5f9bb0a6353bb98fde894376266b19")
   end
 
   def call_new_chat_success
-     call_template("HX6e3f39ca51b19d7ec820efa3c372547f")
+     call_template("HX3c969f534299a1a7c508aee28562450e")
   end
 
   def call_new_chat_error
-     call_template("HX6e3f39ca51b19d7ec820efa3c372547f")
+     call_template("HX5db7c8dad0f52bee6b84009aa85c143d")
   end
 
   def call_template(csid)
