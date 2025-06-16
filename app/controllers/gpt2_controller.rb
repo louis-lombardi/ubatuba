@@ -16,7 +16,7 @@ class Gpt2Controller < ApplicationController
         rescue
           lead_params = assistant_content
         end
-        Lead.create!(JSON.parse(lead_params).merge(chat_id: chat_id, profile: current_profile).as_json)
+        Lead.create!(JSON.parse(lead_params).merge(chat_id: chat_id, profile: current_profile, whats_number: number.split(':')[1]).as_json)
         user.delete
         WhatsappService.new(thanks, number).call
       elsif content.in?(%w[nao Nao NAO Não não NÃO])
@@ -34,7 +34,7 @@ class Gpt2Controller < ApplicationController
         rescue
           lead_params = assistant_content
         end
-        Lead.create!(JSON.parse(lead_params).merge(chat_id: chat_id, profile: current_profile).as_json)
+        Lead.create!(JSON.parse(lead_params).merge(chat_id: chat_id, profile: current_profile, whats_number: number.split(':')[1]).as_json)
         user.delete
         WhatsappService.new(thanks_message, number).call
       elsif content.in?(%w[nao Nao NAO Não não NÃO])
