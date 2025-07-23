@@ -92,7 +92,7 @@ class Gpt2Controller < ApplicationController
     request['Authorization'] = "Bearer #{Rails.application.credentials.gpt_key}"
     response = http.request(request)
     #Log.create(source: 'gpt_response', additional_info: response.body)
-    JSON.parse(response.body)['choices'].first['message']['content'].gsub('<strong>','*').gsub('</strong>','*')
+    JSON.parse(response.body)['choices'].first['message']['content'].gsub('<strong>','*').gsub('</strong>','*').gsub('<ul>','').gsub('</ul>','').gsub('<li>','- ').gsub('</li>','')
   end
 
   def body_hash_lead(chat_id)
