@@ -107,7 +107,7 @@ end
         <h2 style=\"color: #21c2d1;\">Detalhes da sua viagem</h2>
         <ul>
         <li><strong>Perfil de usuario:</strong> #{lead.profile || 'Viajante'}</li>
-        <li><strong>Número de whatsapp:</strong> #{lead.whats_number} (<a href=https://api.whatsapp.com/send/?phone=#{lead.whats_number}>conversar com este número</a>)</li>
+        <li><strong>Número de whatsapp:</strong> #{lead.whats_number} (<a href=https://api.whatsapp.com/send/?phone=#{lead.whats_number.gsub('+','')}>conversar com este número</a>)</li>
         <li><strong>Local de partida:</strong> #{lead.origin}</li>
         <li><strong>Destino e tipo de viagem:</strong> #{lead.destination}</li>
         <li><strong>Número de pessoas:</strong> #{lead.amount_people - lead.amount_children} adulto(s), #{lead.amount_children} criança(s)</li>
@@ -151,7 +151,7 @@ end
         <h2 style=\"color: #21c2d1;\">Informações de contato do visitante</h2>
         <ul>
         <li><strong>Perfil de usuario:</strong> #{lead.profile || 'Viajante'}</li>
-        <li><strong>Número de whatsapp:</strong> #{lead.whats_number} (<a href=https://api.whatsapp.com/send/?phone=#{lead.whats_number}>conversar com este número</a>)</li>
+        <li><strong>Número de whatsapp:</strong> #{lead.whats_number} (<a href=https://api.whatsapp.com/send/?phone=#{lead.whats_number.gsub('+','')}>conversar com este número</a>)</li>
         <li><strong>Email:</strong> #{lead.email}</li>
         <li><strong>Local de partida:</strong> #{lead.origin}</li>
         <li><strong>Destino e tipo de viagem:</strong> #{lead.destination}</li>
