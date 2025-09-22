@@ -7,7 +7,11 @@ class Gpt2Controller < ApplicationController
       WhatsappService.new(welcome_message, number).call
     end
     chat_id = user.current_chat_id
-    if ChatMessage.where(chat_id: chat_id, role: 'authorized').any? || ChatMessage.where(chat_id: chat_id, role: 'not_authorized').any?
+    if content == "cp57100"
+       user.delete
+       user = WhatsappUser.create(number: number, current_chat_id: SecureRandom.uuid, last_connect: DateTime.now)
+       WhatsappService.new(new_chat_message, number).call
+    elsif ChatMessage.where(chat_id: chat_id, role: 'authorized').any? || ChatMessage.where(chat_id: chat_id, role: 'not_authorized').any?
       if content =="Começar"
         user.delete
         user = WhatsappUser.create(number: number, current_chat_id: SecureRandom.uuid, last_connect: DateTime.now)
@@ -16,7 +20,7 @@ class Gpt2Controller < ApplicationController
         WhatsappService.new(nil, number).call_new_chat_not_understood
       end
     elsif ChatMessage.where(chat_id: chat_id, role: 'end').any? && !ChatMessage.where(chat_id: chat_id, role: 'partial_no').any?
-      if content.in?(%w[sim SIM Sim simm ok OK Ok])
+      if content.in?(%w[sim SIM Sim simm ok OK Ok]) 
        ChatMessage.create(chat_id: chat_id, role: 'authorized')
         assistant_content = send_request(body_hash_lead(chat_id))
         begin
@@ -52,7 +56,7 @@ class Gpt2Controller < ApplicationController
     else
       ChatMessage.create(chat_id: chat_id, content: content, role: 'user')
       assitant_content = send_request(body_hash_response(chat_id))
-      if assitant_content.include?("ENDING_CHAT")
+      if assitant_content.include?("END") && assitant_content.include?("CHAT")
         ChatMessage.create(chat_id: chat_id, role: 'end') 
         WhatsappService.new(nil, number).call_agreement
       else
