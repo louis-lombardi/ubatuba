@@ -1,3 +1,4 @@
+=begin
 class CreateUser < ActiveRecord::Migration[5.2]
   def change
     create_table :whatsapp_users do |t|
@@ -9,4 +10,5 @@ class CreateUser < ActiveRecord::Migration[5.2]
     end
   end
 end
+=end
 
