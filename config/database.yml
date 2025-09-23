@@ -11,7 +11,7 @@ development:
   <<: *default
   username: u259172299_louis2
   password: hiuzchiu9872Z
-  host: 147.93.14.8
+  host: '147.93.14.8'
   database: u259172299_louis_local
   port: 3306
 
