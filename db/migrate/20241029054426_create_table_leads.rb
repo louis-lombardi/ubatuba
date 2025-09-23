@@ -1,3 +1,4 @@
+=begin
 class CreateTableLeads < ActiveRecord::Migration[5.2]
   def change
     create_table :leads do |t|
@@ -25,3 +26,4 @@ class CreateTableLeads < ActiveRecord::Migration[5.2]
     end
   end
 end
+=end
