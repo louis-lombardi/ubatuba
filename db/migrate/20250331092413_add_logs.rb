@@ -1,3 +1,4 @@
+=begin
 class AddLogs < ActiveRecord::Migration[5.2]
     def change
       create_table :logs do |t|
@@ -10,4 +11,5 @@ class AddLogs < ActiveRecord::Migration[5.2]
       end
     end
   end
+  =end
   
