@@ -1,3 +1,4 @@
+=begin
 class AddFieldsToPackages < ActiveRecord::Migration[5.2]
   def change
     add_column :packages, :supplier, :string
@@ -22,3 +23,4 @@ class AddFieldsToPackages < ActiveRecord::Migration[5.2]
     add_column :packages, :services, :string
   end
 end
+=end
